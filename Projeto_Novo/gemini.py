@@ -1,0 +1,53 @@
+import google.generativeai as genai
+from env import SECRET_KEY
+
+def Gemini_Connect():
+
+    GOOGLE_API_KEY = SECRET_KEY
+
+    genai.configure(api_key=GOOGLE_API_KEY)
+
+    generation_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 0,
+    "max_output_tokens": 8192,
+    }
+    safety_settings = [
+    {
+        "category": "HARM_CATEGORY_HARASSMENT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_HATE_SPEECH",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        "threshold": "BLOCK_NONE"
+    },
+    {
+        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+        "threshold": "BLOCK_NONE"
+    },
+    ]
+    system_instruction = "Você é um agente especialista em socorros em uma ONG e dado um determinado relato, você analise qual o melhor caminho ou coisas necessárias para resolver essa situação. Passe instruções para uma equipe operacional, como uma espécie de chamado, para resolver esse problema julgue um nível de prioridade de 1 a 5 e forneça o bairro."
+    model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+                              generation_config=generation_config,
+                              system_instruction=system_instruction,
+                              safety_settings=safety_settings)
+
+    chat = model.start_chat(history=[
+  {
+    "role": "user",
+    "parts": ["Dado uma entrada, forneça uma resposta seguindo o exemplo da saída. Para entradas fora desse contexto, retorne \"Desculpe, \nmas o tipo de entrada inserido não está de acordo com o solicitado\" \n\nExemplo de chamado para Prioridade nível 5\nEntrada: No bairro que estou Moinhos de Vento, a água da enchente ultrapassou 5 metros de altura, não temos alimentos e \nnem lugar para estocar as coisas. Uma canoa não consegue chegar aqui por conta dos destroços ao redor do caminho, \ntem cerca de 30 pessoas aqui comigo, estamos em cima de um telhado e existem 3 crianças feridas no local.\n\n\nSaída: \nTítulo: Resgate Urgente: Grupo Isolado em Telhado após Inundações em Porto Alegre\n\nSíntese da Situação: Grupo de 30 pessoas e 3 crianças feridas isoladas em um telhado devido à inundação, \nsem acesso a alimentos e com obstáculos na água impedindo o resgate por barcos. \n\nPrioridade: Nível 5 - Emergência Máxima.\n\nLocalização: Moinhos de Vento, Porto Alegre, Rio Grande do Sul.\n\nRecursos Necessários:\n*Helicóptero para resgate aéreo.\n*Equipe de resgate especializada em salvamento aquático e em altura.\n*Equipamentos de salvamento: Cordas, macas, coletes salva-vidas, kits de primeiros socorros.\n*Suprimentos essenciais: Alimentos, água potável, cobertores e roupas secas.\n\nAções a Serem Tomadas:\n1.Confirmar a localização exata do grupo.\n2.Deslocar o helicóptero com a equipe de resgate para o local.\n3.Avaliar a situação e as condições do local.\n4.Realizar o resgate utilizando técnicas adequadas.\n5.Prestar primeiros socorros, se necessário.\n6.Transportar as vítimas para um local seguro.\n7.Fornecer alimentos, água, cobertores e roupas secas.\n8.Verificar a disponibilidade de recursos na região.\n9.Comunicar a situação ao centro de operações de emergência local.\n\nObservações:\nManter contato constante com o grupo isolado para obter informações atualizadas.\nPriorizar a segurança da equipe de resgate em condições adversas.\nCoordenar esforços com outras equipes de emergência na região.\n--------------------------------------------------------------------------------------------------------------------------\n\nExemplo de chamado para Prioridade nível 4\nEntrada:  A minha casa está cheia de água, eu perdi tudo, estou ilhada e não consigo sair para comprar comida, os meus filhos estão chorando de fome, não temos nem roupa seca e nem lugar para dormir a água tomou tudo, bairro Anchieta\n\nTítulo: Resgate Urgente: Família Ilhada por Inundações em Porto Alegre\nSíntese da Situação: Família ilhada em casa inundada no bairro Anchieta, sem acesso a alimentos, roupas secas ou local seguro para dormir. Crianças presentes e necessitando de assistência.\n\nPrioridade: Nível 4 - Emergência Alta.\n\nLocalização: Anchieta, Porto Alegre, Rio Grande do Sul.\n\nRecursos Necessários:\n*Equipe de resgate com bote inflável ou veículo anfíbio capaz de navegar em águas rasas e superar obstáculos.\n*Suprimentos essenciais: Alimentos, água potável, cobertores, roupas secas, kits de higiene.\n*Acomodação temporária em abrigo ou alojamento.\n\nAções a Serem Tomadas:\n1. Confirmar a localização exata da família e avaliar a situação da inundação no local.\n2. Deslocar a equipe de resgate com bote ou veículo anfíbio para o local.\n3. Realizar o resgate da família, garantindo a segurança de todos.\n4. Prestar apoio emocional e verificar a necessidade de atendimento médico.\n5. Fornecer alimentos, água, cobertores, roupas secas e kits de higiene.\n6. Transportar a família para um abrigo ou alojamento temporário.\n7. Registrar a situação da família e oferecer suporte para acesso a programas de assistência social.\n\nObservações:\nManter contato constante com a família para obter informações atualizadas.\nAvaliar a possibilidade de danos estruturais na residência antes do retorno da família.\nCoordenar esforços com outras equipes de emergência na região.\nInvestigar a necessidade de apoio psicológico para a família.\n--------------------------------------------------------------------------------------------------------------------------\n\nExemplo de chamado para Prioridade nível 3\nEntrada: No bairro [Restinga], a água da chuva invadiu minha casa, estragando móveis e alimentos. A água já baixou, mas a rua ainda está alagada, com muita lama e lixo. Preciso de ajuda para limpar minha casa e remover os entulhos.\n\nTítulo: Solicitação de Apoio: Limpeza e Remoção de Entulho após Inundação em Porto Alegre\n\nSíntese da Situação: Morador do bairro Restinga necessita de ajuda para limpar a residência e remover entulho após inundação. A água baixou, mas a rua ainda está alagada, com muita lama e lixo.\n\nPrioridade: Nível 3 - Prioridade Média.\n\nLocalização: Restinga, Porto Alegre, Rio Grande do Sul.\n\nRecursos Necessários:\n*Equipe de apoio com equipamentos de limpeza: Pá, vassoura, rodo, baldes, botas de borracha.\n*Caminhão para remoção de entulho e lixo.\n*Materiais de limpeza: Água sanitária, desinfetante, detergente.\n\nAções a Serem Tomadas:\n1. Confirmar a localização exata do morador e avaliar a situação da residência.\n2. Deslocar a equipe de apoio com os equipamentos de limpeza para o local.\n3. Auxiliar na limpeza da residência, removendo lama, lixo e entulho.\n4. Desinfetar a residência para prevenir doenças.\n5. Remover o entulho e lixo com o caminhão, encaminhando para local apropriado.\n6. Registrar a situação do morador e oferecer informações sobre programas de assistência social, caso necessite.\n\nObservações:\nVerificar a necessidade de outros tipos de apoio, como alimentos, água potável ou roupas.\nCoordenar esforços com outras equipes de apoio na região.\n--------------------------------------------------------------------------------------------------------------------------\n\nExemplo de chamado para Prioridade nível 2\nEntrada: Após a tempestade, a rua [Tristeza] está bloqueada por árvores caídas. Não consigo sair de casa e preciso ir trabalhar.\n\nTítulo: Remoção de Obstáculos: Rua Bloqueada por Árvores Caídas em Porto Alegre\n\nSíntese da Situação: Rua Tristeza bloqueada por árvores caídas após tempestade, impedindo a passagem de veículos e pedestres.\n\nPrioridade: Nível 2 - Prioridade Moderada.\n\nLocalização: Tristeza, Porto Alegre, Rio Grande do Sul.\n\nRecursos Necessários:\n*Equipe de apoio com motosserras e equipamentos de segurança.\n*Caminhão para remoção dos galhos e troncos.\n\nAções a Serem Tomadas:\n1. Confirmar a localização exata da rua bloqueada e avaliar a situação.\n2. Deslocar a equipe de apoio com os equipamentos necessários para o local.\n3. Remover as árvores caídas com segurança, utilizando as motosserras.\n4. Cortar os galhos e troncos em tamanhos adequados para transporte.\n5. Remover os resíduos com o caminhão, encaminhando para local apropriado.\n6. Liberar a rua para o tráfego de veículos e pedestres.\n\nObservações:\nVerificar a existência de fios elétricos na área antes de iniciar os trabalhos.\nGarantir a segurança da equipe de apoio e dos moradores da região.\nCoordenar esforços com outras equipes de apoio na região, caso necessário.\n--------------------------------------------------------------------------------------------------------------------------\n\nExemplo de chamado para Prioridade nível 1\nEntrada: No bairro [Partenon], a chuva forte causou alguns pontos de alagamento na rua, e o bueiro da esquina está entupido.\n\nTítulo: Manutenção Preventiva: Alagamento e Bueiro Entupido em Porto Alegre\n\nSíntese da Situação: Pontos de alagamento no bairro Partenon devido à chuva forte, com bueiro entupido na esquina.\n\nPrioridade: Nível 1 - Baixa Prioridade.\n\nLocalização: Partenon, Porto Alegre, Rio Grande do Sul.\n\nRecursos Necessários:\n*Equipe de manutenção com ferramentas para desobstrução de bueiros.\n*Equipamentos de segurança: Luvas, botas, cones de sinalização.\n\nAções a Serem Tomadas:\n1. Confirmar a localização exata do bueiro entupido e avaliar a situação do alagamento.\n2. Deslocar a equipe de manutenção com os equipamentos necessários para o local.\n3. Sinalizar a área para garantir a segurança da equipe e dos pedestres.\n4. Desobstruir o bueiro utilizando as ferramentas adequadas.\n5. Remover o lixo e entulho do local, garantindo o escoamento da água.\n\nObservações:\nVerificar a necessidade de outros serviços de manutenção na região.\nMonitorar a situação do alagamento após a desobstrução do bueiro.\nOrientar os moradores sobre a importância de não jogar lixo nas ruas."]
+  },
+#   {
+#     "role": "model",
+#     "parts": ["##  Entendido! \n\nA partir de agora, você pode me fornecer os relatos da situação que eu analiso e gero um chamado para a equipe operacional. \n\n**Lembre-se de fornecer o máximo de detalhes possível, incluindo:**\n\n* **Localização:** Bairro, rua, pontos de referência.\n* **Quantidade de pessoas afetadas:** Adultos, crianças, idosos, pessoas com deficiência.\n* **Gravidade da situação:**  Quais os riscos imediatos? Há feridos? Qual o nível de água? \n* **Necessidades urgentes:** Alimentos, água, abrigo, medicamentos.\n* **Obstáculos e dificuldades:**  Acesso bloqueado, falta de comunicação, etc.\n\n\n**Quanto mais informações você fornecer, mais preciso e eficaz será o chamado para a equipe de resgate!**"]
+#   },
+])
+    return chat
+
+
+

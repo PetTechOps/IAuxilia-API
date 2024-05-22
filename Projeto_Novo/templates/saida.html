@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/saida.css') }}">
+  <title>Detalhes do Resgate</title>
+</head>
+
+<body>
+  <div class="content wrapper">
+    <!-- <div class="saida"> -->
+      <button><a href="/cadastro">Cadastrar outro usuário</a></button>
+      <h2>Nome: {{usuario.nome}}</h2>
+      <h2>CEP: {{usuario.cep}}</h2>
+      {{ saida|safe }}
+      <br><br>
+      <button><a href="/resgates">Listar todos os resgates</a></button>
+      <button>Alterar prompt</button>
+     
+    <!-- </div> -->
+  </div>
+</body>
+
+</html>
