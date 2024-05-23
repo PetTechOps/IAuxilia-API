@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/saida.css') }}">
+  <title>Detalhes do Resgate</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .wrapper {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      overflow-y: auto;
+    }
+    h1 {
+      color: #333;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #333;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 1em;
+    }
+    .section-content {
+      padding: 5px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      white-space: pre-wrap;
+      font-size: 0.9em;
+    }
+    p {
+      margin: 5px 0;
+    }
+    ul, ol {
+      margin: 5px 0;
+      padding-left: 20px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.9em;
+      margin: 5px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button a {
+      color: white;
+      text-decoration: none;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <h2>Detalhes do Resgate</h2>
+    <br>
+    <div class="section">
+      <div class="section-title">Nome:</div>
+      <div class="section-content">{{ usuario.nome }}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">CEP:</div>
+      <div class="section-content">{{ usuario.cep }}</div>
+    </div>
+    <div class="section">
+      <br>
+      <div class="section-content">{{ saida | safe }}</div>
+    </div>
+    <button><a href="/cadastro">Cadastrar outro usuário</a></button>
+    <button><a href="/resgates">Listar todos os resgates</a></button>
+    <button><a href="/alterar_prompt">Alterar prompt</a></button>
+  </div>
+</body>
+
+</html>

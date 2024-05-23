@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .wrapper {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
+
+        .agendamento {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .prioridade {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .detalhes {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .botao-apagar {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .botao-apagar:hover {
+            background-color: #c82333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 style="text-align: center;">Lista de Agendamentos</h1>
+        {% for usuario in usuarios %}
+        <div class="agendamento">
+            <h2 class="prioridade">Prioridade: {{ usuario.prioridade }}</h2>
+            <p class="detalhes">{{ usuario.saida | safe }}</p>
+            <button class="botao-apagar"><a href="/deletar/{{ usuario.id }}">Apagar Agendamento</a></button>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
