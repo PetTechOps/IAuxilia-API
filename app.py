@@ -60,3 +60,16 @@ if __name__ == '__main__':
       db.create_all()
   app.run(debug=True)
 
+@app.route('/update_user/<id>', methods=['GET', 'POST'])
+def update_user(id): 
+   usuario = User.query.filter_by(id = id).first()
+   usuario.nome = request.form.get('nome')
+   db.session.commit()
+   return redirect('/resgates')
+
+@app.route('/deletar/<int:id>', methods=['GET','DELETE'])
+def deletar(id):
+   usuario = User.query.get(id)
+   db.session.delete(usuario)
+   db.session.commit()
+   return redirect('/resgates')
