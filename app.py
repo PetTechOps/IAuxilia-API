@@ -48,7 +48,8 @@ def resgates_get():
   usuarios = Usuario.query.all()
   return render_template('resgates.html', usuarios = usuarios)
 
-@app.get('/perfil/<id>')
+
+@app.get('/perfil/<int:id>')
 def exibir_perfil(id):
    usuario = Usuario.query.get(id)
    return render_template('atualizar.html', usuario = usuario)
@@ -66,7 +67,7 @@ def atualizar_usuario(id):
 
 
 # DELETE
-@app.route('/deletar/<id>', methods=['GET', 'DELETE'])
+@app.route('/deletar/<int:id>', methods=['GET', 'DELETE'])
 def deletar(id):
   usuario = Usuario.query.get(id)
   db.session.delete(usuario)
@@ -79,6 +80,6 @@ def page_not_found(e):
     return render_template('erro.html')
 
 if __name__ == '__main__':
-  with app.app_context():
-      db.create_all()
+  # with app.app_context():
+  #     db.create_all()
   app.run(debug=True)
