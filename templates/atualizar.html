@@ -18,16 +18,33 @@
   <body>
     <div class="content">
       <h1 style="text-align: center">IAuxilia Você</h1>
-      <form action="/prompt" method="POST">
-        <input type="text" name="nome" id="nome" placeholder="Nome" required />
-        <input type="text" name="cep" id="cep" placeholder="CEP" required />
+      <form action="/atualizar/{{usuario.id}}" method="POST">
+        <input type="text" name="id" value="{{usuario.id}}" disabled />
+        <input
+          type="text"
+          name="nome"
+          id="nome"
+          placeholder="Nome"
+          value="{{usuario.nome}}"
+          required
+        />
+        <input
+          type="text"
+          name="cep"
+          id="cep"
+          placeholder="CEP"
+          value="{{usuario.cep}}"
+          required
+        />
         <textarea
           name="prompt"
           id="prompt"
           placeholder="Prompt de entrada"
           rows="8"
           required
-        ></textarea>
+        >
+{{usuario.prompt}}</textarea
+        >
         <button type="submit">Enviar</button>
       </form>
     </div>

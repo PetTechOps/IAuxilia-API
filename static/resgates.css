@@ -1,0 +1,98 @@
+body {
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+* {
+  font-family: Poppins;
+}
+
+h2 {
+  margin-top: 10px;
+}
+
+.wrapper {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.agendamento {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  padding: 20px 30px;
+}
+
+.prioridade {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.detalhes {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.botao-apagar {
+  background-color: #dc3545;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.botao-apagar:hover {
+  background-color: #c82333;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nenhum {
+  margin: 50px 0;
+  text-align: center;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.9em;
+  margin: 5px 2px;
+  padding: 10px 20px;
+  text-align: center;
+  text-align: center;
+  text-decoration: none;
+}
+button a {
+  color: white;
+  text-decoration: none;
+}
+
+.cadastro {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 10px;
+}
+
+.botoes {
+  display: flex;
+  gap: 15px;
+}
+
+.botoes button:hover,
+.cadastro:hover {
+  opacity: 0.8;
+}

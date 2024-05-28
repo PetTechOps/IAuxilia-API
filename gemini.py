@@ -1,9 +1,9 @@
 import google.generativeai as genai
-from env import SECRET_KEY
+# from env import SECRET_KEY
 
 def Gemini_Connect():
 
-    GOOGLE_API_KEY = SECRET_KEY
+    GOOGLE_API_KEY = "AIzaSyAiifuzK27qZ8uK9yWRU926Q6lMsJtSH28"
 
     genai.configure(api_key=GOOGLE_API_KEY)
 

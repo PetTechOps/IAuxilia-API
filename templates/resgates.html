@@ -1,76 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Listagem de Agendamentos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='resgates.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-        .wrapper {
-            padding-left: 4rem;
-            padding-right: 4rem;
-        }
-
-        .agendamento {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .prioridade {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .detalhes {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .botao-apagar {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .botao-apagar:hover {
-            background-color: #c82333;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <div class="wrapper">
-        <h1 style="text-align: center;">Lista de Agendamentos</h1>
-        {% for usuario in usuarios %}
-        <div class="agendamento">
-            <h2 class="prioridade">Prioridade: {{ usuario.prioridade }}</h2>
-            <p class="detalhes">{{ usuario.saida | safe }}</p>
-            <button class="botao-apagar"><a href="/deletar/{{ usuario.id }}">Apagar Agendamento</a></button>
+      <h1 style="text-align: center">Lista de Agendamentos</h1>
+      {% if usuarios | length == 0 %}
+      <div class="nenhum">Nenhum resgate encontrado!</div>
+      {% else %} {% for usuario in usuarios %}
+      <div class="agendamento">
+        <h2 class="prioridade">Prioridade: {{ usuario.prioridade }}</h2>
+        <h3 class="prioridade" style="font-size: 18px">
+          Nome: {{usuario.nome}}
+        </h3>
+        <h3 class="prioridade" style="font-size: 16px">CEP: {{usuario.cep}}</h3>
+        <p class="detalhes">{{ usuario.saida | safe }}</p>
+        <div class="botoes">
+          <a href="/perfil/{{usuario.id}}"
+            ><button style="background-color: #9c27b0">
+              Alterar informações
+            </button></a
+          >
+          <button class="botao-apagar">
+            <a href="/deletar/{{usuario.id}}">Apagar Agendamento</a>
+          </button>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %} {% endif %}
+      <div class="cadastro">
+        <a href="/cadastro"><button>Cadastrar outro usuário</button></a>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
