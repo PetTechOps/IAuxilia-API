@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listagem de Agendamentos</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='resgates.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Listagem de Agendamentos</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='resgates.css') }}" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
-</head>
-
-<body>
-  <div class="wrapper">
-    <div style="display: flex; justify-content: center; align-items: center;;"> <a href="/cadastro"><button style="margin-right: 4rem;">Voltar</button></a>
-      <h1 style="text-align: center">Todos os chamados</h1>
-    </div>
-    {% if usuarios | length == 0 %}
-    <div class="nenhum">Nenhum resgate encontrado!</div>
-    {% else %} {% for usuario in usuarios %}
-    <div class="agendamento">
-      <h2 class="prioridade">Prioridade: {{ usuario.prioridade }}</h2>
-      <h3 class="prioridade" style="font-size: 18px">
-        Nome: {{usuario.nome}}
-      </h3>
-      <h3 class="prioridade" style="font-size: 16px">CEP: {{usuario.cep}}</h3>
-      <p class="detalhes">{{ usuario.saida | safe }}</p>
-      <div class="botoes">
-        <a href="/perfil/{{usuario.id}}"><button style="background-color: #9c27b0">
-            Alterar informações
-          </button></a>
-        <button class="botao-apagar">
-          <a href="/deletar/{{usuario.id}}">Apagar Agendamento</a>
-        </button>
+  <body>
+    <div class="wrapper">
+      <div style="display: flex; justify-content: center; align-items: center">
+        <a href="/cadastro"
+          ><button style="margin-right: 4rem">Voltar</button></a
+        >
+        <h1 style="text-align: center">Todos os chamados</h1>
+      </div>
+      {% if usuarios | length == 0 %}
+      <div class="nenhum">Nenhum resgate encontrado!</div>
+      {% else %} {% for usuario in usuarios %}
+      <div class="agendamento">
+        {% set prioridade = usuario.prioridade | int %}
+        <h2 class="prioridade">
+          Nível {{prioridade}} - {% if prioridade == 1 %} Baixa Prioridade {%
+          elif prioridade == 2 %} Prioridade Moderada {% elif prioridade == 3 %}
+          Prioridade Média {% elif prioridade == 4 %} Emergência Alta {% else %}
+          Emergência Máxima {% endif %}
+        </h2>
+        <h3 class="prioridade" style="font-size: 18px">
+          Nome: {{usuario.nome}}
+        </h3>
+        <h3 class="prioridade" style="font-size: 16px">CEP: {{usuario.cep}}</h3>
+        <p class="detalhes">{{ usuario.saida | safe }}</p>
+        <div class="botoes">
+          <a href="/perfil/{{usuario.id}}"
+            ><button style="background-color: #9c27b0">
+              Alterar informações
+            </button></a
+          >
+          <button class="botao-apagar">
+            <a href="/deletar/{{usuario.id}}">Apagar Agendamento</a>
+          </button>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+      <div class="cadastro">
+        <a href="/cadastro"><button>Cadastrar outro usuário</button></a>
       </div>
     </div>
-    {% endfor %} {% endif %}
-    <div class="cadastro">
-      <a href="/cadastro"><button>Cadastrar outro usuário</button></a>
-    </div>
-  </div>
-</body>
-
+  </body>
 </html>

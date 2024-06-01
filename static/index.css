@@ -34,8 +34,7 @@ textarea {
   border-radius: 5px;
   font-size: 16px;
   margin-bottom: 20px;
-  padding: 10px;
-  text-indent: 4px;
+  padding: 10px 14px;
 }
 
 input[name="id"] {
@@ -64,7 +63,7 @@ button:hover {
   opacity: 0.8;
 }
 
-p{
+p {
   color: gray;
   font-size: 15px;
 }

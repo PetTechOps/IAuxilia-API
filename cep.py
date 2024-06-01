@@ -6,9 +6,6 @@ class CEPService:
 
     @staticmethod
     def obter_info_cep(cep):
-        if not CEPService.is_valid_cep(cep):
-            return None
-        
         url = f'{CEPService.BASE_URL}/{cep}/json/'
         response = requests.get(url)
         if response.status_code == 200:

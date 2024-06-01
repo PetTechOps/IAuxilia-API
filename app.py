@@ -1,5 +1,7 @@
+# pip install flask-sqlalchemy flask-migrate google-generativeai python-dotenv
 from flask import Flask, render_template, request, redirect
 from flask_migrate import Migrate
+from sqlalchemy import desc
 from model import db, Usuario
 from gemini import Gemini
 from cep import CEPService
@@ -31,16 +33,22 @@ def index_post():
   cep = request.form.get('cep') # Recebendo o CEP na Entrada
   prompt = request.form.get('prompt') # Recebendo o Prompt/Relato na Entrada
   
-  if cep and not CEPService.is_valid_cep(cep): return render_template('erro.html') # Retornar um Erro caso a entrada seja inválida
-  info_cep = CEPService.obter_info_cep(cep) if cep else None # Verificando se o usuário inseriu algo que não seja no formato de um CEP
-  if info_cep: mensagem = f'{prompt}, {info_cep.values()}'# Preparando a mensagem que vai para o prompt
-  else: mensagem = prompt # Se não tiver informações do CEP, enviaremos apenas o relato
+  if cep: # Verificando se o cep foi preenchido
+    if not CEPService.is_valid_cep(cep):
+      return render_template('erro.html', msg='Formato de CEP inválido!')
+    info_cep = CEPService.obter_info_cep(cep) # Consultando as informações do CEP
+    if info_cep: prompt = f'{prompt}, {info_cep.values()}' # Preparando a mensagem que vai para o prompt
+    else: return render_template('erro.html', msg='CEP não encontrado!')  # Retornar um erro caso o CEP seja no formato inválido ou se não foi encontrado
   
-  response = chat.send_message(mensagem) # Envio da mensagem para o Gemini
+  # Se não tiver informações do CEP, enviaremos apenas o relato
+  response = chat.send_message(prompt) # Envio da mensagem para o Gemini
   saida = response.text.replace('*','') # Removendo todas as ocorrências de * (Utilizado para deixar em negrito)
-  prioridade = re.findall(r'Prioridade:\s*(.*)', saida)[0] # Regex para filtrar a primeira ocorrência de Prioridade
-  
-  usuario = Usuario(nome, cep, prompt, saida, prioridade.replace("</strong>", "")) # Criação de uma instância de Usuario 
+  prioridade_txt = re.search(r'Prioridade:\s*(.*)', saida) # Regex para filtrar a primeira ocorrência de Prioridade
+  if not prioridade_txt:
+     return render_template('erro.html', msg='Desculpe, mas o relato inserido não está de acordo com o objetivo de resgate.')
+  prioridade_num = re.findall(r'\d', prioridade_txt.group())[0] # Regex para filtrar apenas o número da ocorrência
+
+  usuario = Usuario(nome, cep, prompt, saida, prioridade_num) # Criação de uma instância de Usuario 
   db.session.add(usuario) # Adicionando o usuario criado no Banco SQLite 
   db.session.commit() # Confirmando o comando 
   
@@ -51,15 +59,15 @@ def index_post():
 # READ
 @app.get('/resgates')
 def resgates_get():
-  usuarios = Usuario.query.all()
-  return render_template('resgates.html', usuarios = usuarios)
+  usuarios = Usuario.query.order_by(desc(Usuario.prioridade)).all()
+  return render_template('resgates.html', usuarios=usuarios)
 
 
 # ROTA DE PERFIL
 @app.get('/perfil/<int:id>')
 def exibir_perfil(id):
    usuario = Usuario.query.get(id)
-   return render_template('atualizar.html', usuario = usuario)
+   return render_template('atualizar.html', usuario=usuario)
 
 
 # UPDATE
@@ -85,7 +93,7 @@ def deletar(id):
 # ERROR
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('erro.html')
+    return render_template('erro.html', msg='Página não encontrada!')
 
 if __name__ == '__main__':
   app.run(debug=True)
